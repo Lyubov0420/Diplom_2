@@ -1,0 +1,123 @@
+{
+  "uid" : "b29f959b7f4eae6d",
+  "name" : "CreateNotUniqueUserTest",
+  "fullName" : "CreateUserTests.CreateNotUniqueUserTest",
+  "historyId" : "2a3bda045ccee57cb3d1a1f4a74b5b8b",
+  "time" : {
+    "start" : 1751406045599,
+    "stop" : 1751406046866,
+    "duration" : 1267
+  },
+  "description" : "Тест создания не уникального пользователя, создали одного, потом такого же с теми же данными переменных, потом удалили\"",
+  "descriptionHtml" : "<p>Тест создания не уникального пользователя, создали одного, потом такого же с теми же данными переменных, потом удалили&quot;</p>\n",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "description" : "Тест создания не уникального пользователя, создали одного, потом такого же с теми же данными переменных, потом удалили\"",
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "Создание пользователя",
+      "time" : {
+        "start" : 1751406045626,
+        "stop" : 1751406045912,
+        "duration" : 286
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ {
+        "name" : "user",
+        "value" : "ru.praktikum.model.User@550ae683"
+      } ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "Создание пользователя",
+      "time" : {
+        "start" : 1751406045954,
+        "stop" : 1751406046161,
+        "duration" : 207
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ {
+        "name" : "user",
+        "value" : "ru.praktikum.model.User@550ae683"
+      } ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "User deletion",
+      "time" : {
+        "start" : 1751406046215,
+        "stop" : 1751406046814,
+        "duration" : 599
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ {
+        "name" : "accessToken",
+        "value" : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NjQ1NWRjOWVkMjgwMDAxYjY0MWU0MSIsImlhdCI6MTc1MTQwNjA0NCwiZXhwIjoxNzUxNDA3MjQ0fQ.SrqO_uF_9xeHNuvj6Zspx9b6SiABpVfxXEWxtaDY7p0"
+      } ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 3,
+    "hasContent" : true,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "package",
+    "value" : ""
+  }, {
+    "name" : "testClass",
+    "value" : "CreateUserTests"
+  }, {
+    "name" : "testMethod",
+    "value" : "CreateNotUniqueUserTest"
+  }, {
+    "name" : "suite",
+    "value" : "CreateUserTests"
+  }, {
+    "name" : "host",
+    "value" : "Lyubov"
+  }, {
+    "name" : "thread",
+    "value" : "5460@Lyubov.main(1)"
+  }, {
+    "name" : "framework",
+    "value" : "junit4"
+  }, {
+    "name" : "language",
+    "value" : "java"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "b29f959b7f4eae6d.json",
+  "parameterValues" : [ ]
+}
