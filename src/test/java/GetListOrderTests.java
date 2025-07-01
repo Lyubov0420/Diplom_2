@@ -24,42 +24,53 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 public class GetListOrderTests {
     private final UserCreationSteps userCreationSteps = new UserCreationSteps();
     private final UserLoginSteps userLoginSteps = new UserLoginSteps();
-    private DeleteUserStep deleteUserStep;
-    private String accessToken;
+    private final DeleteUserStep deleteUserStep = new DeleteUserStep();
     private final Faker faker = new Faker();
     private final OrderSteps orderSteps = new OrderSteps();
+
+    private String accessToken;
+    private User user;
+    private Order createdOrder;
 
     @Before
     public void setUp() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        deleteUserStep = new DeleteUserStep();
+
+        // Создание и регистрация пользователя
+        String email = faker.internet().emailAddress();
+        String password = faker.internet().password();
+        String name = faker.name().fullName();
+        user = new User(email, password, name);
+        userCreationSteps.createUser(user);
+
+        // Авторизация пользователя
+        Login login = new Login(email, password);
+        ValidatableResponse authResponse = userLoginSteps.loginUser(login);
+        accessToken = authResponse.extract().path("accessToken");
+
+        // Создание тестового заказа
+        List<String> ids = orderSteps.getIngredients()
+                .statusCode(200)
+                .body("success", equalTo(true))
+                .extract().path("data._id");
+        Collections.shuffle(ids);
+        createdOrder = new Order(List.of(ids.get(0), ids.get(1)));
+        orderSteps.createOrderWithAuth(accessToken, createdOrder);
     }
 
     @Test
     @Description("Тест получения заказов пользователя с авторизацией")
     public void getOrdersListWithAuth() {
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-        String name = faker.name().fullName();
-        User user = new User(email, password, name);
-        userCreationSteps.createUser(user);
-        Login login = new Login(email, password);
-        ValidatableResponse authResponse = userLoginSteps.loginUser(login);
-        accessToken = authResponse.extract().path("accessToken");
-        List<String> ids = orderSteps.getIngredients()
-                .statusCode(200) // Добавляем проверку на успешное получение ингредиентов
-                .body("success", equalTo(true)) // Проверка на наличие success
-                .extract().path("data._id");
-        Collections.shuffle(ids);
-        Order order = new Order(List.of(ids.get(0), (ids.get(1))));
-        orderSteps.createOrderWithAuth(accessToken, order);
         orderSteps.getOrderListWithAuth(accessToken)
                 .statusCode(200)
-                .body("orders", notNullValue());
+                .body("success", equalTo(true))
+                .body("orders", notNullValue())
+                .body("orders[0].ingredients", notNullValue());
     }
+
     @Test
-    @Description("Тест получения заказов пользователя без авторизацией")
-    public void getOrdersListWithoutAuth(){
+    @Description("Тест получения заказов пользователя без авторизации")
+    public void getOrdersListWithoutAuth() {
         orderSteps.getErrorForNoAuth()
                 .statusCode(401)
                 .body("success", equalTo(false))
@@ -67,7 +78,7 @@ public class GetListOrderTests {
     }
 
     @After
-    @Description("Метод для удаления созданных пользователей")
+    @Description("Удаление созданного пользователя")
     public void tearDown() {
         if (accessToken != null && !accessToken.isEmpty()) {
             deleteUserStep.deleteUser(accessToken)

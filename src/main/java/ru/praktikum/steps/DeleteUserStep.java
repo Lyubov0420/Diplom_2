@@ -5,7 +5,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
-import static ru.praktikum.Config.ConfigClass.BASE_URL;
+import static ru.praktikum.config.ConfigClass.BASE_URL;
 
 public class DeleteUserStep {
 

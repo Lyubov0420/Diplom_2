@@ -6,7 +6,7 @@ import ru.praktikum.model.User;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static ru.praktikum.Config.ConfigClass.BASE_URL;
+import static ru.praktikum.config.ConfigClass.BASE_URL;
 
 public class UserUpdateSteps {
 
