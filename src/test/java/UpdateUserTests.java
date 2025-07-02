@@ -20,47 +20,56 @@ public class UpdateUserTests {
     private final UserCreationSteps userCreationSteps = new UserCreationSteps();
     private final UserLoginSteps userLoginSteps = new UserLoginSteps();
     private final UserUpdateSteps userUpdateSteps = new UserUpdateSteps();
-    private DeleteUserStep deleteUserStep;
-    private String accessToken;
+    private final DeleteUserStep deleteUserStep = new DeleteUserStep();
     private final Faker faker = new Faker();
 
+    private User user;
+    private String accessToken;
 
     @Before
     public void setUp() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        deleteUserStep = new DeleteUserStep();
-    }
-    @Test
-    public void updateUserWithAuthTest(){
+
+        // Создание тестового пользователя перед каждым тестом
         String email = faker.internet().emailAddress();
         String password = faker.internet().password();
         String name = faker.name().fullName();
-        User user = new User(email, password, name);
+        user = new User(email, password, name);
         userCreationSteps.createUser(user);
-        Login login = new Login(email, password);
+    }
+
+    @Test
+    @Description("Обновление данных пользователя с авторизацией")
+    public void updateUserWithAuthTest() {
+        // Авторизация пользователя
+        Login login = new Login(user.getEmail(), user.getPassword());
         ValidatableResponse authResponse = userLoginSteps.loginUser(login);
         accessToken = authResponse.extract().path("accessToken");
+
+        // Подготовка новых данных
         String newName = faker.name().fullName();
         String newEmail = faker.internet().emailAddress();
         String newPassword = faker.internet().password();
-        User updatedUser = new User(newEmail, newPassword, newName );
+        User updatedUser = new User(newEmail, newPassword, newName);
+
+        // Обновление данных и проверки
         userUpdateSteps.updateUserWithAuth(accessToken, updatedUser)
                 .statusCode(200)
                 .body("success", equalTo(true))
                 .body("user.email", equalTo(newEmail))
                 .body("user.name", equalTo(newName));
     }
+
     @Test
+    @Description("Попытка обновления данных пользователя без авторизации")
     public void updateUserWithoutAuthTest() {
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-        String name = faker.name().fullName();
-        User user = new User(email, password, name);
-        userCreationSteps.createUser(user);
+        // Подготовка новых данных
         String newName = faker.name().fullName();
         String newEmail = faker.internet().emailAddress();
         String newPassword = faker.internet().password();
-        User updatedUser = new User(newEmail, newPassword, newName );
+        User updatedUser = new User(newEmail, newPassword, newName);
+
+        // Попытка обновления без авторизации и проверки
         userUpdateSteps.updateUserWithoutAuth(updatedUser)
                 .statusCode(401)
                 .body("success", equalTo(false))
@@ -68,7 +77,7 @@ public class UpdateUserTests {
     }
 
     @After
-    @Description("Метод для удаления созданных пользователей")
+    @Description("Удаление созданных пользователей после тестов")
     public void tearDown() {
         if (accessToken != null && !accessToken.isEmpty()) {
             deleteUserStep.deleteUser(accessToken)
